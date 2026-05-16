@@ -39,7 +39,7 @@ app.post('/api/crossmint/payment', async (req: Request, res: Response) => {
     
     // Your credentials
     const walletAddress = '0xee556510Fb70F7F1F1484C22B4D584A871cD204c';
-    const apiKey = 'sk_production_5TG2w7cbr8tedKZgwitEuQ7jNxKeMkogaguzWppLkGjZjg5XCcsdXVhf5ssUtvt13vjchH4Fno9MMy4Z2UaP7BFXyFuAi8Y6cCNW6EPYGTQyvMLqk68yw9WAjvspw8zzrnpsBvbyQzowD13sufXvhQEUJ8kgFpzJYePoZMjLJ4mPTYw1t9XKZuRVX5f1maDs9nRhukBsNNuTvXRs2JGZbFSt';
+    const apiKey = process.env.CROSSMINT_API_KEY || '';
     const projectId = '13eb3ce8-b831-4927-b560-42ef8d55ca9e';
 
     console.log('Calling Crossmint API...');
