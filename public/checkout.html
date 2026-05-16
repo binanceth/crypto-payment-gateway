@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Payment Gateway</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; margin: 0; display: flex; justify-content: center; align-items: center; }
+        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 500px; width: 90%; }
+        h1 { color: #333; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 30px; }
+        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; width: 100%; }
+        button:hover { opacity: 0.9; transform: translateY(-2px); transition: all 0.2s; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        label { font-weight: 600; color: #374151; display: block; text-align: left; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🛒 Crypto Payment Gateway</h1>
+    <p>Pay with card, receive USDC on Polygon</p>
+    
+    <label for="amount">Amount (USD)</label>
+    <input type="number" id="amount" value="10" step="1" min="1">
+    
+    <button onclick="startCheckout()">Continue to Payment</button>
+</div>
+
+<script>
+function startCheckout() {
+    // Your staging credentials
+    const clientId = 'ck_staging_5dhM1nUK';
+    const collectionId = 'demo-nft-collection';
+    const walletAddress = '0xee556510Fb70F7F1F1484C22B4D584A871cD204c';
+    const amount = document.getElementById('amount').value;
+    
+    const url = `https://staging.crossmint.com/checkout?clientId=${clientId}&collectionId=${collectionId}&recipientAddress=${walletAddress}&amount=${amount}&currency=usdc`;
+    
+    // Open checkout in a popup
+    window.open(url, '_blank', 'width=500,height=700');
+}
+</script>
+</body>
+</html>
