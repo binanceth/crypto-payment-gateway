@@ -52,15 +52,15 @@ exports.handler = async (event, context) => {
     }
 
     // Your wallet addresses
-    const walletAddress = '0xE5173e7c3089bD89cd1341b637b8e1951745ED5C'; // Polygon
+    const walletAddress = '0xee556510Fb70F7F1F1484C22B4D584A871cD204c'; // Polygon
 
     // WORKING SOLUTION: Use Crossmint's Buy Button approach
     // This is the most reliable method that doesn't require complex API setup
     
     const crossmintUrl = `https://www.crossmint.com/checkout?` + new URLSearchParams({
       // REQUIRED: Both client-id and projectId
-      'client-id': 'ck_production_ABEjX378KrXNmt4oAnUpUwubzh56u9ra2Wd5U5hMp3kysx5SmiYAP4EywJ5p1aPpsvrzjrkoxF4mEFxLXDyAshWUfpKcx34j8yZjbj2yzMoNbDMYPRUZro1ZKRBWdj6WhJDr5YRyKdXYgFJLL7GfKG5cu5y1fL2WHsJpw4GwzqkYVnVyBgmi9oK5QkH3FnGsMNgpkAbcmPY8rpmx3ZAPjJQ9',
-      'projectId': 'eeb0c5f5-6ce6-46ff-b0b3-c237d2172a61',
+      'client-id': 'ck_production_5TG2w7cbr8tedKZgwitEuQ7jNxKeMkogaguzWppLkGjZjg5XCcs89pcT4gA1PGU3TFmrortokDisZBLZcDSFumLmy8Z1NxKHBsXPv9TmQUqVcjGQnMqLVyTVkCofoP5hQS5aiuUEXomRjft5GqquGDdwNPU5hVWhKmofnMdgB9wM3XmDVuNjjfb6CMywAGsa1hALBgv6pPGnzkJT3F8UyVzD',
+      'projectId': '13eb3ce8-b831-4927-b560-42ef8d55ca9e',
       'recipient-address': walletAddress,
       'email': customerEmail || '',
       'locale': 'en-US',
