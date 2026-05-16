@@ -61,7 +61,7 @@ app.post('/api/crossmint/payment', async (req: Request, res: Response) => {
         }],
         payment: {
           method: 'polygon',
-          currency: currency.toLowerCase()
+          currency: 'usdc'
         },
         customer: customerEmail ? { email: customerEmail } : undefined,
         locale: 'en-US'
