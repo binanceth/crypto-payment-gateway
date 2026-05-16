@@ -26,7 +26,7 @@ app.post('/api/crossmint/payment', async (req: Request, res: Response) => {
   console.log('Body:', req.body);
   
   try {
-    const { amount, currency, customerEmail } = req.body;
+    const { amount, customerEmail } = req.body;
     
     const walletAddress = '0xee556510Fb70F7F1F1484C22B4D584A871cD204c';
     const apiKey = process.env.CROSSMINT_API_KEY || '';
