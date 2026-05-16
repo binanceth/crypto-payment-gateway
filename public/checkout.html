@@ -360,8 +360,66 @@
             </div>
         </div>
     </div>
-
 <script>
+    <script>
+// Configuration - Use your Render backend
+const API_BASE = 'https://crypto-payment-gateway-8u1d.onrender.com';
+
+// Form submission handler
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('payment-form');
+    if (!form) return;
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const amount = document.getElementById('amount').value;
+        const currency = document.getElementById('currency').value;
+        const customerEmail = document.getElementById('customerEmail')?.value || 'customer@example.com';
+        
+        // Show loading
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE}/api/crossmint/payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: parseFloat(amount),
+                    currency: currency,
+                    chain: 'polygon',
+                    customerEmail: customerEmail
+                })
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.checkoutUrl) {
+                    window.location.href = result.checkoutUrl;
+                } else {
+                    alert('Error: ' + (result.error || 'Failed to create checkout session'));
+                }
+            } else {
+                alert('Server error. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Network error. Please try again.');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Continue to Payment';
+            }
+        }
+    });
+});
+</script>
 // Configuration - Use your Render backend
 const API_BASE = 'https://crypto-payment-gateway-8u1d.onrender.com';
 let currentSession = null;
