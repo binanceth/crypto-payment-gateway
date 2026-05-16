@@ -1,55 +1,65 @@
+const axios = require('axios');
+
 exports.handler = async (event) => {
-    // Handle CORS preflight
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+    };
+
     if (event.httpMethod === 'OPTIONS') {
-        return {
-            statusCode: 204,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS'
-            },
-            body: ''
-        };
+        return { statusCode: 204, headers, body: '' };
     }
 
-    // Only allow POST
     if (event.httpMethod !== 'POST') {
-        return {
-            statusCode: 405,
-            headers: { 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({ error: 'Method not allowed' })
-        };
+        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
     }
 
     try {
         const { amount, currency, customerEmail } = JSON.parse(event.body);
-
-        // Your wallet address
         const walletAddress = '0xee556510Fb70F7F1F1484C22B4D584A871cD204c';
+        const apiKey = 'ck_production_5TG2w7cbr8tedKZgwitEuQ7jNxKe';
 
-        // Your Crossmint credentials
-        const clientId = 'ck_production_5TG2w7cbr8tedKZgwitEuQ7jNxKe';
-        const projectId = '13eb3ce8-b831-4927-b560-42ef8d55ca9e';
+        // Create order via Crossmint API
+        const response = await axios.post(
+            'https://www.crossmint.com/api/2022-06-09/orders',
+            {
+                lineItems: [{
+                    collectionLocator: 'crossmint:13eb3ce8-b831-4927-b560-42ef8d55ca9e',
+                    callData: {
+                        totalPrice: amount.toString(),
+                        quantity: 1,
+                        recipient: walletAddress
+                    }
+                }],
+                payment: {
+                    method: 'polygon',
+                    currency: currency.toLowerCase()
+                },
+                customer: customerEmail ? { email: customerEmail } : undefined,
+                locale: 'en-US'
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-API-KEY': apiKey
+                }
+            }
+        );
 
-        // Build the Crossmint checkout URL
-        const checkoutUrl = `https://www.crossmint.com/checkout?client-id=${clientId}&projectId=${projectId}&recipient-address=${walletAddress}&email=${customerEmail || ''}&locale=en-US&currency=${currency}&amount=${amount}&blockchain=polygon`;
+        const checkoutUrl = response.data.onRamp?.url || `https://www.crossmint.com/checkout/${response.data.id}`;
 
         return {
             statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify({
-                success: true,
-                checkoutUrl: checkoutUrl
-            })
+            headers,
+            body: JSON.stringify({ success: true, checkoutUrl })
         };
     } catch (error) {
+        console.error('Error:', error.response?.data || error.message);
         return {
             statusCode: 500,
-            headers: { 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({ error: error.message })
+            headers,
+            body: JSON.stringify({ error: error.response?.data?.message || error.message })
         };
     }
 };
