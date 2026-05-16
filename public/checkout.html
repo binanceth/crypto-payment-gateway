@@ -144,7 +144,7 @@
 </div>
 
 <script>
-const API_BASE = '/.netlify/functions';
+const API_BASE = 'https://crypto-payment-gateway-8u1d.onrender.com';
 
 const form = document.getElementById('payment-form');
 const submitBtn = document.getElementById('submit-btn');
@@ -174,7 +174,7 @@ form.addEventListener('submit', async (e) => {
     showLoading(true);
     
     try {
-        const response = await fetch(`${API_BASE}/checkout`, {
+        const response = await fetch(`${API_BASE}/api/crossmint/payment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
