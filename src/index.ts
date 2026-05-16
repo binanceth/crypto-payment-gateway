@@ -56,11 +56,9 @@ app.post('/api/crossmint/payment', async (req, res) => {
       })
     });
 
-    const data = await response.json();
-    console.log('Crossmint response:', data);
-
-    const checkoutUrl = data.onRamp?.url || `https://www.crossmint.com/checkout/${data.id}`;
-
+    const data: any = await response.json();
+const checkoutUrl = data.onRamp?.url || `https://www.crossmint.com/checkout/${data.id}`;
+    
     res.json({ success: true, checkoutUrl });
   } catch (error: any) {
     console.error('Payment error:', error.message);
