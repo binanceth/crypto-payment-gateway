@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
 
@@ -14,12 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
 // Config endpoint
-app.get('/api/crossmint/config', (req, res) => {
+app.get('/api/crossmint/config', (_req: Request, res: Response) => {
   res.json({
     success: true,
     config: {
@@ -29,8 +29,8 @@ app.get('/api/crossmint/config', (req, res) => {
   });
 });
 
-// PAYMENT ENDPOINT - THIS IS THE IMPORTANT ONE
-app.post('/api/crossmint/payment', async (req, res) => {
+// PAYMENT ENDPOINT
+app.post('/api/crossmint/payment', async (req: Request, res: Response) => {
   console.log('=== PAYMENT REQUEST RECEIVED ===');
   console.log('Body:', req.body);
   
@@ -68,7 +68,7 @@ app.post('/api/crossmint/payment', async (req, res) => {
       })
     });
 
-    const data = await response.json();
+    const data: any = await response.json();
     console.log('Crossmint response:', data);
     
     const checkoutUrl = data.onRamp?.url || data.url || `https://www.crossmint.com/checkout/${data.id}`;
@@ -82,16 +82,16 @@ app.post('/api/crossmint/payment', async (req, res) => {
 });
 
 // Serve checkout page
-app.get('/', (req, res) => {
+app.get('/', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../public/checkout.html'));
 });
 
-app.get('/checkout', (req, res) => {
+app.get('/checkout', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../public/checkout.html'));
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
   console.log('404 Not Found:', req.method, req.url);
   res.status(404).json({ success: false, error: 'Endpoint not found' });
 });
