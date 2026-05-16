@@ -43,7 +43,15 @@ exports.handler = async (event) => {
         });
 
         const data = await response.json();
-        const checkoutUrl = data.onRamp?.url || `https://www.crossmint.com/checkout/${data.id}`;
+
+        let checkoutUrl;
+        if (data.onRamp?.url) {
+            checkoutUrl = data.onRamp.url;
+        } else if (data.url) {
+            checkoutUrl = data.url;
+        } else {
+            checkoutUrl = `https://www.crossmint.com/checkout/${data.id}`;
+        }
 
         return {
             statusCode: 200,
@@ -51,10 +59,11 @@ exports.handler = async (event) => {
             body: JSON.stringify({ success: true, checkoutUrl })
         };
     } catch (error) {
+        console.error('Function error:', error);
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({ error: error.message })
         };
     }
-}
+};
